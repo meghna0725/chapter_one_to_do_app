@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Modal, StyleSheet, TouchableOpacity } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { CheckBox } from '@rneui/themed';
+import { MaterialIcons } from '@expo/vector-icons';
 
-// TODO add cancel button to exit from modal
+interface AddTaskProps {
+  onAddTask: (task: { taskName: string; taskDescription: string; completed: boolean }) => void;
+}
 
-const AddTask = () => {
+const AddTask: React.FC<AddTaskProps> = ({ onAddTask }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [input1, setInput1] = useState('');
-  const [input2, setInput2] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('to do');
+  const [taskName, setTaskName] = useState('');
+  const [taskDescription, setTaskDescription] = useState('');
+  const [completed, setCompleted] = useState(false);
 
   return (
     <View>
@@ -22,33 +25,33 @@ const AddTask = () => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+            <TouchableOpacity
+              style={styles.cancelButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <MaterialIcons name="cancel" size={24} color="black" />
+            </TouchableOpacity>
             <Text style={styles.modalText}>Add Task Details</Text>
             <TextInput
               style={styles.input}
               placeholder="Task Name"
-              value={input1}
-              onChangeText={setInput1}
+              value={taskName}
+              onChangeText={setTaskName}
             />
             <TextInput
               style={styles.input}
               placeholder="Task Description"
-              value={input2}
-              onChangeText={setInput2}
+              value={taskDescription}
+              onChangeText={setTaskDescription}
             />
-            <Picker
-              selectedValue={selectedStatus}
-              style={styles.picker}
-              onValueChange={(itemValue) => setSelectedStatus(itemValue)}
-            >
-              <Picker.Item label="To do" value="to do" />
-              <Picker.Item label="In progress" value="in progress" />
-              <Picker.Item label="Completed" value="completed" />
-            </Picker>
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
+                onAddTask({ taskName, taskDescription, completed });
                 setModalVisible(false);
-                // Optionally handle input values here
+                setTaskName('');
+                setTaskDescription('');
+                setCompleted(false);
               }}
             >
               <Text style={styles.buttonText}>Submit</Text>
@@ -81,6 +84,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    position: 'relative',
+  },
+  cancelButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
   },
   input: {
     width: 200,
@@ -90,10 +99,18 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingLeft: 10,
   },
-  picker: {
-    width: 100,
-    height: 50,
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 15,
+  },
+  checkboxContainerStyle: {
+    backgroundColor: 'transparent', // Transparent background
+    borderWidth: 0, // Remove border
+  },
+  checkboxLabel: {
+    fontSize: 16,
+    marginLeft: 8,
   },
   button: {
     backgroundColor: '#2196F3',
