@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Button } from 'react-native';
-import AddTask from '../../components/Task';  // Adjust the import path as needed
-import TaskView from '../../components/TaskView';  // Adjust the import path as needed
+import { View, StyleSheet, Text, ScrollView } from 'react-native';
+import AddTask from '../../components/Task'; // Adjust the import path as needed
+import TaskView from '../../components/TaskView'; // Adjust the import path as needed
 
 const App: React.FC = () => {
   const [tasks, setTasks] = useState<{ taskName: string; taskDescription: string; completed: boolean }[]>([]);
@@ -10,23 +10,13 @@ const App: React.FC = () => {
     setTasks([...tasks, task]);
   };
 
-  const [viewUncompletedTasks, setViewUncompletedTasks] = useState(false);
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Task Management</Text>
-      <Button
-        title="Show All"
-        color="#841584"
-        accessibilityLabel="Learn more about this purple button"
-      />
-      <Button
-        title="Show Completed"
-        color="#841584"
-        accessibilityLabel="Learn more about this purple button"
-      />
+      <Text style={styles.title}>Task Management System</Text>
       <AddTask onAddTask={handleAddTask} />
-      <TaskView tasks={tasks} setTasks={setTasks} />
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <TaskView tasks={tasks} setTasks={setTasks} />
+      </ScrollView>
     </View>
   );
 };
@@ -34,17 +24,20 @@ const App: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start', // Center content at the top
+    padding: 20,
+    backgroundColor: 'lightblue',
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    overflow: 'scroll',
     alignItems: 'center',
-    padding: 20,  // Optional: Add some padding for better spacing
   },
   title: {
-    fontSize: 24, // Font size for the title
-    fontWeight: 'bold', // Bold font
-    marginBottom: 20, // Space below the title
-    textAlign: 'center', // Center align text
-    width: '100%', // Full width to center text horizontally
-    paddingTop: 55,
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    marginTop: 40,
+    textAlign: 'center',
   },
 });
 

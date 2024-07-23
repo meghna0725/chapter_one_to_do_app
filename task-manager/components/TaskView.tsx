@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { DataTable } from 'react-native-paper';
+import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
 import { CheckBox } from '@rneui/themed';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -17,76 +16,86 @@ interface TaskViewProps {
 
 const TaskView: React.FC<TaskViewProps> = ({ tasks, setTasks }) => {
   const handleDelete = (index: number) => {
+    const taskName = tasks[index].taskName;
     setTasks(tasks.filter((_, i) => i !== index));
+    Alert.alert('Task Deleted', `${taskName} has been deleted.`);
+  };
+
+  const handleCheckboxPress = (index: number) => {
+    const updatedTasks = [...tasks];
+    updatedTasks[index].completed = !updatedTasks[index].completed;
+    setTasks(updatedTasks);
+    if (updatedTasks[index].completed) {
+      Alert.alert('Task Completed', `${updatedTasks[index].taskName} has been marked as completed.`);
+    }
   };
 
   return (
-    <DataTable style={styles.container}>
-      <DataTable.Header style={styles.tableHeader}>
-        <DataTable.Title style={styles.tableTitle}>Name</DataTable.Title>
-        <DataTable.Title style={styles.tableTitle}>Details</DataTable.Title>
-        <DataTable.Title style={styles.tableTitle}>Status</DataTable.Title>
-        <DataTable.Title style={styles.tableTitle}>Actions</DataTable.Title>
-      </DataTable.Header>
+    <>
       {tasks.map((task, index) => (
-        <DataTable.Row key={index} style={styles.row}>
-          <DataTable.Cell style={styles.cell}>
-            <Text style={styles.text}>{task.taskName}</Text>
-          </DataTable.Cell>
-          <DataTable.Cell style={styles.cell}>
-            <Text style={styles.text}>{task.taskDescription}</Text>
-          </DataTable.Cell>
-          <DataTable.Cell style={styles.cell}>
-            <CheckBox
-              containerStyle={styles.checkboxContainer}
-              center
-              checked={task.completed}
-              onPress={() => {
-                const updatedTasks = [...tasks];
-                updatedTasks[index].completed = !updatedTasks[index].completed;
-                setTasks(updatedTasks);
-              }}
-            />
-          </DataTable.Cell>
-          <DataTable.Cell style={styles.cell}>
-            <TouchableOpacity onPress={() => handleDelete(index)}>
-              <MaterialIcons name="delete" size={24} color="black" />
-            </TouchableOpacity>
-          </DataTable.Cell>
-        </DataTable.Row>
+        <View key={index} style={styles.taskBox}>
+          <View style={styles.taskHeader}>
+            <Text style={styles.taskName}>{task.taskName}</Text>
+            <View style={styles.taskActions}>
+              <CheckBox
+                containerStyle={styles.checkboxContainer}
+                center
+                checked={task.completed}
+                onPress={() => handleCheckboxPress(index)}
+              />
+              <TouchableOpacity onPress={() => handleDelete(index)}>
+                <MaterialIcons name="delete" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <Text style={styles.taskDescription}>{task.taskDescription}</Text>
+        </View>
       ))}
-    </DataTable>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 10,
+  taskBox: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 8,
+    marginVertical: 8,
+    borderColor: 'black',
+    borderWidth: 2, 
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0,
+    shadowRadius: 3.84,
+    elevation: 5,
+    width: '100%', 
   },
-  tableHeader: {
-    backgroundColor: '#DCDCDC',
+  taskHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  tableTitle: {
-    flex: 1,
-    alignItems: 'flex-start',
+  taskName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    flex: 1, 
   },
-  row: {
-    height: 'auto', 
-    justifyContent: 'center',
-    paddingTop: 12,
+  taskDescription: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 10, 
   },
-  cell: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  text: {
-    flexWrap: 'wrap',
-    flex: 1,
+  taskActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   checkboxContainer: {
-    backgroundColor: 'transparent', 
-    borderWidth: 0, 
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    marginRight: 10,
   },
 });
 

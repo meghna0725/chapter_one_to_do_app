@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Modal, StyleSheet, TouchableOpacity } from 'react-native';
-import { CheckBox } from '@rneui/themed';
+import { View, Text, TextInput, Modal, StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 interface AddTaskProps {
@@ -15,7 +14,12 @@ const AddTask: React.FC<AddTaskProps> = ({ onAddTask }) => {
 
   return (
     <View>
-      <Button title="Add New Task" onPress={() => setModalVisible(true)} />
+      <TouchableOpacity
+        style={styles.openButton}
+        onPress={() => setModalVisible(true)}
+      >
+        <Text style={styles.openButtonText}> + Add New Task</Text>
+      </TouchableOpacity>
 
       <Modal
         animationType="slide"
@@ -45,7 +49,7 @@ const AddTask: React.FC<AddTaskProps> = ({ onAddTask }) => {
               onChangeText={setTaskDescription}
             />
             <TouchableOpacity
-              style={styles.button}
+              style={styles.submitButton}
               onPress={() => {
                 onAddTask({ taskName, taskDescription, completed });
                 setModalVisible(false);
@@ -54,7 +58,7 @@ const AddTask: React.FC<AddTaskProps> = ({ onAddTask }) => {
                 setCompleted(false);
               }}
             >
-              <Text style={styles.buttonText}>Submit</Text>
+              <Text style={styles.submitButtonText}>Submit</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -64,6 +68,22 @@ const AddTask: React.FC<AddTaskProps> = ({ onAddTask }) => {
 };
 
 const styles = StyleSheet.create({
+  openButton: {
+    backgroundColor: 'white',
+    borderColor: 'black',
+    borderWidth: 2,
+    borderRadius: 25,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 10,
+  },
+  openButtonText: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -74,7 +94,7 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 50,
+    padding: 35,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -84,7 +104,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    position: 'relative',
   },
   cancelButton: {
     position: 'absolute',
@@ -98,19 +117,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 15,
     paddingLeft: 10,
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  checkboxContainerStyle: {
-    backgroundColor: 'transparent', // Transparent background
-    borderWidth: 0, // Remove border
-  },
-  checkboxLabel: {
-    fontSize: 16,
-    marginLeft: 8,
+    borderRadius: 5,
   },
   button: {
     backgroundColor: '#2196F3',
@@ -118,7 +125,14 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
   },
-  buttonText: {
+  submitButton: {
+    backgroundColor: '#2196F3',
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    elevation: 2,
+  },
+  submitButtonText: {
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
