@@ -10,3 +10,4 @@
 8. Press i to launch iOS simulator
 
    <img width="306" alt="image" src="https://github.com/user-attachments/assets/474b411f-35c8-4b32-8d32-59321d005d2a">
+<img width="296" alt="image" src="https://github.com/user-attachments/assets/c7e4256e-304b-4ee3-bc3a-b4b66afb359d">
