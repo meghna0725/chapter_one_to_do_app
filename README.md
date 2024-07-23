@@ -8,3 +8,5 @@
 6. Install dependencies ``` npm install ```
 7. Start expo development server ``` npx expo start ```
 8. Press i to launch iOS simulator
+
+   <img width="306" alt="image" src="https://github.com/user-attachments/assets/474b411f-35c8-4b32-8d32-59321d005d2a">
